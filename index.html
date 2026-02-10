@@ -5,79 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tonkxn Portfolio</title>
     <style>
-        /* 1. ตั้งค่าพื้นฐานให้ภาพชิดขอบ ไม่เหลือขอบขาว */
+        /* 1. Reset ค่าพื้นฐานและทำให้รูปเต็มจอ */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body { 
-            background-color: #0f172a; /* พื้นหลังสีเข้มช่วยให้รูปเด่น */
-            overflow-x: hidden; 
+            background-color: #050505; /* พื้นหลังสีดำสนิทเพื่อให้แสงเด่น */
             font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            cursor: none; /* ซ่อนเม้าส์ปกติ เพื่อใช้แสงแทน (หรือลบออกถ้าอยากให้เห็นเม้าส์ด้วย) */
+        }
+
+        /* 2. ตัวสร้างแสง Spotlight */
+        #spotlight {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* ให้คลิกทะลุแสงไปที่รูปได้ */
+            z-index: 9999;
+            background: radial-gradient(
+                circle 150px at var(--x, 50%) var(--y, 50%), 
+                rgba(255, 255, 255, 0.15) 0%, 
+                rgba(0, 0, 0, 0) 100%
+            ),
+            radial-gradient(
+                circle 400px at var(--x, 50%) var(--y, 50%), 
+                rgba(255, 255, 255, 0.05) 0%, 
+                transparent 80%
+            );
         }
 
         .portfolio-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             width: 100%;
         }
 
-        /* 2. ปรับให้ภาพเต็มหน้าจอ และมี Animation */
+        /* 3. ปรับรูปภาพให้กว้างเต็มหน้าจอเป๊ะๆ */
         img {
-            width: 100%;         /* ขยายเต็มความกว้างจอ */
-            max-width: 1200px;   /* จำกัดไว้ไม่ให้ใหญ่เกินไปในจอคอม */
+            width: 100vw; 
             height: auto;
             display: block;
-            
-            /* ลูกเล่นที่ 1: Fade in และเลื่อนขึ้นเวลา Scroll */
-            view-timeline-name: --image-reveal;
-            view-timeline-axis: block;
-            animation-timeline: --image-reveal;
-            animation-name: reveal;
-            animation-range: entry 10% cover 30%;
-            animation-fill-mode: both;
-            
-            margin-bottom: 20px; /* เว้นระยะระหว่างสไลด์เล็กน้อย */
-            border-radius: 8px;  /* ลบมุมภาพให้ดูซอฟต์ */
+            opacity: 0;
+            transform: scale(0.95);
+            transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
-        @keyframes reveal {
-            from {
-                opacity: 0;
-                transform: translateY(100px) scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        footer {
-            padding: 50px;
-            text-align: center;
-            color: #94a3b8;
-            font-size: 0.9rem;
-        }
-
-        /* สำหรับมือถือ */
-        @media (max-width: 768px) {
-            img {
-                border-radius: 0; /* มือถือให้ภาพชิดขอบไปเลย */
-                margin-bottom: 5px;
-            }
-        }
-    </style>
-</head>
-<body>
-
-    <div class="portfolio-container">
-        <img src="01.jpg" alt="Portfolio Page 1">
-        <img src="02.jpg" alt="Portfolio Page 2">
-        <img src="03.jpg" alt="Portfolio Page 3">
-        </div>
-
-    <footer>
-        <p>Built with ❤️ by Tonkxn | Burapha University 66020326</p>
-    </footer>
-
-</body>
-</html>
+        img.reveal {
+            opacity: 1;
+            transform: scale(1);
