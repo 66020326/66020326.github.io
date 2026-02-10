@@ -5,61 +5,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tonkxn Portfolio</title>
     <style>
-        /* 1. Reset ค่าพื้นฐานและทำให้รูปเต็มจอ */
+        /* 1. ลบขอบขาวและตั้งค่าพื้นหลัง */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body { 
-            background-color: #050505; /* พื้นหลังสีดำสนิทเพื่อให้แสงเด่น */
-            font-family: 'Inter', sans-serif;
+            background-color: #050505; /* พื้นหลังดำสนิท */
             overflow-x: hidden;
-            cursor: none; /* ซ่อนเม้าส์ปกติ เพื่อใช้แสงแทน (หรือลบออกถ้าอยากให้เห็นเม้าส์ด้วย) */
+            cursor: none; /* ซ่อนเม้าส์ปกติเพื่อโชว์แสงไฟ */
         }
 
-        /* 2. ตัวสร้างแสง Spotlight */
+        /* 2. เลเยอร์แสง Spotlight */
         #spotlight {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none; /* ให้คลิกทะลุแสงไปที่รูปได้ */
-            z-index: 9999;
+            pointer-events: none;
+            z-index: 999;
+            /* ปรับความฟุ้งและขนาดของแสงที่นี่ */
             background: radial-gradient(
                 circle 150px at var(--x, 50%) var(--y, 50%), 
-                rgba(255, 255, 255, 0.15) 0%, 
+                rgba(255, 255, 255, 0.12) 0%, 
                 rgba(0, 0, 0, 0) 100%
-            ),
-            radial-gradient(
-                circle 400px at var(--x, 50%) var(--y, 50%), 
-                rgba(255, 255, 255, 0.05) 0%, 
-                transparent 80%
             );
         }
 
-        .portfolio-container {
+        .container {
             width: 100%;
+            display: flex;
+            flex-direction: column;
         }
 
-        /* 3. ปรับรูปภาพให้กว้างเต็มหน้าจอเป๊ะๆ */
+        /* 3. ปรับไฟล์ SVG ให้เต็มหน้าจอ */
         img {
-            width: 100vw; 
-            height: auto;
+            width: 100vw; /* กว้างเต็มจอพอดี */
+            height: auto; /* ปรับสูงตามสัดส่วนภาพ */
             display: block;
             opacity: 0;
-            transform: scale(0.95);
-            transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
+            transform: translateY(30px);
+            transition: all 1.2s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         img.reveal {
             opacity: 1;
-            transform: scale(1);
+            transform: translateY(0);
         }
 
         footer {
-            padding: 80px 0;
+            padding: 100px 0;
             text-align: center;
-            color: #444;
-            background: #050505;
+            color: #333;
+            font-family: sans-serif;
+            font-size: 14px;
+            letter-spacing: 2px;
         }
     </style>
 </head>
@@ -67,34 +66,40 @@
 
     <div id="spotlight"></div>
 
-    <div class="portfolio-container">
-        <img src="1.svg">
-        <img src="2.svg">
-        <img src="3.svg">
+    <div class="container">
+        <img src="01.svg" alt="Cover">
+        <img src="02.svg" alt="Projects">
+        <img src="03.svg" alt="Contact">
     </div>
 
     <footer>
-        <p>Created by Tonkxn | 66020326</p>
+        <p>TONKXN 66020326 • BURAPHA UNIVERSITY</p>
     </footer>
 
     <script>
-        // ลูกเล่นที่ 1: แสงตามเม้าส์
+        // ระบบแสงไฟตามเม้าส์
         const spotlight = document.getElementById('spotlight');
         window.addEventListener('mousemove', (e) => {
             spotlight.style.setProperty('--x', e.clientX + 'px');
             spotlight.style.setProperty('--y', e.clientY + 'px');
         });
 
-        // ลูกเล่นที่ 2: เลื่อนแล้วภาพค่อยๆ ปรากฏ
+        // ระบบเลื่อนแล้วรูปค่อยๆ ปรากฏ
+        const observerOptions = {
+            threshold: 0.1
+        };
+
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('reveal');
                 }
             });
-        }, { threshold: 0.1 });
+        }, observerOptions);
 
-        document.querySelectorAll('img').forEach(img => observer.observe(img));
+        document.querySelectorAll('img').forEach(img => {
+            observer.observe(img);
+        });
     </script>
 </body>
 </html>
