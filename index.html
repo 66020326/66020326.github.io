@@ -3,22 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tonkun Portfolio</title>
+    <title>Tonkxn Portfolio</title>
     <style>
-        body { margin: 0; padding: 0; background-color: #f0f2f5; font-family: sans-serif; }
-        .container { display: flex; flex-direction: column; align-items: center; }
-        img { width: 100%; max-width: 1000px; height: auto; display: block; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 2px; }
-        footer { padding: 40px; text-align: center; color: #666; }
+        /* 1. ตั้งค่าพื้นฐานให้ภาพชิดขอบ ไม่เหลือขอบขาว */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            background-color: #0f172a; /* พื้นหลังสีเข้มช่วยให้รูปเด่น */
+            overflow-x: hidden; 
+            font-family: 'Inter', sans-serif;
+        }
+
+        .portfolio-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* 2. ปรับให้ภาพเต็มหน้าจอ และมี Animation */
+        img {
+            width: 100%;         /* ขยายเต็มความกว้างจอ */
+            max-width: 1200px;   /* จำกัดไว้ไม่ให้ใหญ่เกินไปในจอคอม */
+            height: auto;
+            display: block;
+            
+            /* ลูกเล่นที่ 1: Fade in และเลื่อนขึ้นเวลา Scroll */
+            view-timeline-name: --image-reveal;
+            view-timeline-axis: block;
+            animation-timeline: --image-reveal;
+            animation-name: reveal;
+            animation-range: entry 10% cover 30%;
+            animation-fill-mode: both;
+            
+            margin-bottom: 20px; /* เว้นระยะระหว่างสไลด์เล็กน้อย */
+            border-radius: 8px;  /* ลบมุมภาพให้ดูซอฟต์ */
+        }
+
+        @keyframes reveal {
+            from {
+                opacity: 0;
+                transform: translateY(100px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        footer {
+            padding: 50px;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        /* สำหรับมือถือ */
+        @media (max-width: 768px) {
+            img {
+                border-radius: 0; /* มือถือให้ภาพชิดขอบไปเลย */
+                margin-bottom: 5px;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <img src="1.svg">
-        <img src="2.svg">
-        <img src="3.svg">
+
+    <div class="portfolio-container">
+        <img src="01.jpg" alt="Portfolio Page 1">
+        <img src="02.jpg" alt="Portfolio Page 2">
+        <img src="03.jpg" alt="Portfolio Page 3">
         </div>
+
     <footer>
-        <p>© 2026 Tonkun Portfolio. Created with Canva & GitHub</p>
+        <p>Built with ❤️ by Tonkxn | Burapha University 66020326</p>
     </footer>
+
 </body>
 </html>
