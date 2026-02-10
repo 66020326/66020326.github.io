@@ -5,27 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tonkxn Portfolio</title>
     <style>
-        /* 1. ลบขอบขาวและตั้งค่าพื้นหลัง */
+        /* 1. ลบขอบขาวรอบเว็บและตั้งค่าพื้นฐาน */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body { 
             background-color: #050505; /* พื้นหลังดำสนิท */
             overflow-x: hidden;
-            cursor: none; /* ซ่อนเม้าส์ปกติเพื่อโชว์แสงไฟ */
+            /* เอา cursor: none ออกเพื่อให้เห็นเม้าส์ปกติ */
+            font-family: sans-serif;
         }
 
-        /* 2. เลเยอร์แสง Spotlight */
+        /* 2. เลเยอร์แสง Spotlight (ปรับให้โปร่งแสงขึ้นเล็กน้อยเพื่อให้เห็นเม้าส์ชัด) */
         #spotlight {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none;
+            pointer-events: none; /* สำคัญ: เพื่อให้กดคลิกทะลุแสงไปที่รูปได้ */
             z-index: 999;
-            /* ปรับความฟุ้งและขนาดของแสงที่นี่ */
             background: radial-gradient(
-                circle 150px at var(--x, 50%) var(--y, 50%), 
+                circle 180px at var(--x, 50%) var(--y, 50%), 
                 rgba(255, 255, 255, 0.12) 0%, 
                 rgba(0, 0, 0, 0) 100%
             );
@@ -37,10 +37,10 @@
             flex-direction: column;
         }
 
-        /* 3. ปรับไฟล์ SVG ให้เต็มหน้าจอ */
+        /* 3. ปรับรูป SVG ให้เต็มหน้าจอ 100% */
         img {
-            width: 100vw; /* กว้างเต็มจอพอดี */
-            height: auto; /* ปรับสูงตามสัดส่วนภาพ */
+            width: 100vw; /* เต็มความกว้างจอ */
+            height: auto; /* สูงตามสัดส่วนภาพ */
             display: block;
             opacity: 0;
             transform: translateY(30px);
@@ -53,10 +53,9 @@
         }
 
         footer {
-            padding: 100px 0;
+            padding: 80px 0;
             text-align: center;
-            color: #333;
-            font-family: sans-serif;
+            color: #444;
             font-size: 14px;
             letter-spacing: 2px;
         }
@@ -67,26 +66,26 @@
     <div id="spotlight"></div>
 
     <div class="container">
-        <img src="1.svg" alt="Cover">
-        <img src="2.svg" alt="Projects">
-        <img src="3.svg" alt="Contact">
+        <img src="1.svg" alt="Cover Page">
+        <img src="2.svg" alt="Project Page">
+        <img src="3.svg" alt="Contact Page">
     </div>
 
     <footer>
-        <p>TONKXN 66020326 • BURAPHA UNIVERSITY</p>
+        <p>TONKUN 66020326 • BURAPHA UNIVERSITY</p>
     </footer>
 
     <script>
-        // ระบบแสงไฟตามเม้าส์
+        // ส่วนที่ 1: คำนวณตำแหน่งเม้าส์เพื่อเคลื่อนย้ายแสง Spotlight
         const spotlight = document.getElementById('spotlight');
         window.addEventListener('mousemove', (e) => {
             spotlight.style.setProperty('--x', e.clientX + 'px');
             spotlight.style.setProperty('--y', e.clientY + 'px');
         });
 
-        // ระบบเลื่อนแล้วรูปค่อยๆ ปรากฏ
+        // ส่วนที่ 2: ระบบเลื่อนแล้วรูปค่อยๆ ปรากฏ (Scroll Reveal)
         const observerOptions = {
-            threshold: 0.1
+            threshold: 0.1 // เริ่มแสดงผลเมื่อรูปโผล่มา 10% ของหน้าจอ
         };
 
         const observer = new IntersectionObserver((entries) => {
