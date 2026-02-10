@@ -5,24 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tonkxn Portfolio</title>
     <style>
-        /* 1. ลบขอบขาวรอบเว็บและตั้งค่าพื้นฐาน */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body { 
-            background-color: #050505; /* พื้นหลังดำสนิท */
+            background-color: #050505; 
             overflow-x: hidden;
-            /* เอา cursor: none ออกเพื่อให้เห็นเม้าส์ปกติ */
             font-family: sans-serif;
         }
 
-        /* 2. เลเยอร์แสง Spotlight (ปรับให้โปร่งแสงขึ้นเล็กน้อยเพื่อให้เห็นเม้าส์ชัด) */
+        /* 1. ส่วนของแสง Spotlight */
         #spotlight {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none; /* สำคัญ: เพื่อให้กดคลิกทะลุแสงไปที่รูปได้ */
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
             z-index: 999;
             background: radial-gradient(
                 circle 180px at var(--x, 50%) var(--y, 50%), 
@@ -31,34 +26,29 @@
             );
         }
 
-        .container {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-        }
+        .container { width: 100%; display: flex; flex-direction: column; }
 
-        /* 3. ปรับรูป SVG ให้เต็มหน้าจอ 100% */
-        img {
-            width: 100vw; /* เต็มความกว้างจอ */
-            height: auto; /* สูงตามสัดส่วนภาพ */
+        /* 2. CSS สำหรับลูกเล่นการเด้ง (หัวใจสำคัญที่คุณถามหา) */
+        .reveal-item {
+            width: 100vw;
+            height: auto;
             display: block;
+            
+            /* สถานะเริ่มต้น: จางออก (opacity 0) และจมลงไป (translateY) */
             opacity: 0;
-            transform: translateY(30px);
-            transition: all 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+            transform: translateY(60px); 
+            
+            /* ความเร็วในการเด้งกลับมา */
+            transition: all 1.0s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        img.reveal {
+        /* 3. สถานะหลังจากเลื่อนมาถึง (จะถูกเติมด้วย JavaScript) */
+        .reveal-item.active {
             opacity: 1;
             transform: translateY(0);
         }
 
-        footer {
-            padding: 80px 0;
-            text-align: center;
-            color: #444;
-            font-size: 14px;
-            letter-spacing: 2px;
-        }
+        footer { padding: 80px 0; text-align: center; color: #444; font-size: 14px; letter-spacing: 2px; }
     </style>
 </head>
 <body>
@@ -66,38 +56,36 @@
     <div id="spotlight"></div>
 
     <div class="container">
-        <img src="1.svg" alt="Cover Page">
-        <img src="2.svg" alt="Project Page">
-        <img src="3.svg" alt="Contact Page">
+        <img src="1.svg" class="reveal-item" alt="Page 1">
+        <img src="2.svg" class="reveal-item" alt="Page 2">
+        <img src="3.svg" class="reveal-item" alt="Page 3">
     </div>
 
     <footer>
-        <p>TONKUN 66020326 • BURAPHA UNIVERSITY</p>
+        <p>TONKXN 66020326 • BURAPHA UNIVERSITY</p>
     </footer>
 
     <script>
-        // ส่วนที่ 1: คำนวณตำแหน่งเม้าส์เพื่อเคลื่อนย้ายแสง Spotlight
+        // ส่วนที่ 1: แสงตามเม้าส์
         const spotlight = document.getElementById('spotlight');
         window.addEventListener('mousemove', (e) => {
             spotlight.style.setProperty('--x', e.clientX + 'px');
             spotlight.style.setProperty('--y', e.clientY + 'px');
         });
 
-        // ส่วนที่ 2: ระบบเลื่อนแล้วรูปค่อยๆ ปรากฏ (Scroll Reveal)
-        const observerOptions = {
-            threshold: 0.1 // เริ่มแสดงผลเมื่อรูปโผล่มา 10% ของหน้าจอ
-        };
-
+        // ส่วนที่ 2: ตัวสั่งให้ CSS "เด้ง" ทำงาน (Active class trigger)
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
+                // ถ้าสัดส่วนรูปโผล่มาเกิน 10% ให้เติม class 'active'
                 if (entry.isIntersecting) {
-                    entry.target.classList.add('reveal');
+                    entry.target.classList.add('active');
                 }
             });
-        }, observerOptions);
+        }, { threshold: 0.1 });
 
-        document.querySelectorAll('img').forEach(img => {
-            observer.observe(img);
+        // สั่งให้ตัวตรวจจับทำงานกับทุกที่มี class 'reveal-item'
+        document.querySelectorAll('.reveal-item').forEach(item => {
+            observer.observe(item);
         });
     </script>
 </body>
