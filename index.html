@@ -53,3 +53,48 @@
         img.reveal {
             opacity: 1;
             transform: scale(1);
+        }
+
+        footer {
+            padding: 80px 0;
+            text-align: center;
+            color: #444;
+            background: #050505;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="spotlight"></div>
+
+    <div class="portfolio-container">
+        <img src="1.svg">
+        <img src="2.svg">
+        <img src="3.svg">
+    </div>
+
+    <footer>
+        <p>Created by Tonkxn | 66020326</p>
+    </footer>
+
+    <script>
+        // ลูกเล่นที่ 1: แสงตามเม้าส์
+        const spotlight = document.getElementById('spotlight');
+        window.addEventListener('mousemove', (e) => {
+            spotlight.style.setProperty('--x', e.clientX + 'px');
+            spotlight.style.setProperty('--y', e.clientY + 'px');
+        });
+
+        // ลูกเล่นที่ 2: เลื่อนแล้วภาพค่อยๆ ปรากฏ
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('reveal');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('img').forEach(img => observer.observe(img));
+    </script>
+</body>
+</html>
