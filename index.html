@@ -138,6 +138,23 @@ footer::before {
     box-shadow: 0 0 20px rgba(255, 255, 255, 0.8); /* เรืองแสง */
     transform: scale(1.1); /* ขยายใหญ่ขึ้นนิดนึง */
 }
+        /* คลาสสำหรับรูปแนวตั้ง */
+.portrait {
+    width: auto !important;  /* ยกเลิกการบังคับเต็มจอแนวนอน */
+    max-height: 90vh;        /* ให้สูงไม่เกิน 90% ของหน้าจอ */
+    display: block;
+    margin: 0 auto;          /* จัดให้อยู่ตรงกลางจอ */
+    box-shadow: 0 0 20px rgba(0,0,0,0.5); /* (แถม) ใส่เงาให้รูปดูลอยๆ */
+}
+
+/* ถ้าหน้าจอโทรศัพท์ (จอเล็ก) ให้กลับไปเต็มจอเหมือนเดิมก็ได้ */
+@media (max-width: 768px) {
+    .portrait {
+        width: 100% !important;
+        max-height: none;
+    }
+}
+
     </style>
 </head>
 <body>
@@ -145,7 +162,7 @@ footer::before {
     <div id="spotlight"></div>
 
     <div class="container">
-        <img src="TK.Resume.jpg" class="reveal-item"
+        <img src="TK.Resume.jpg" class="reveal-item portrait"
         <img src="1.jpg" class="reveal-item">
         <img src="2.jpg" class="reveal-item">
         <img src="3.jpg" class="reveal-item">
