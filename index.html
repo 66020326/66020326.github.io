@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tonkxn Portfolio</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <style>
         /* --- 1. การตั้งค่าพื้นฐาน --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -43,7 +46,59 @@
 
         .hotspot:hover { background: rgba(255, 255, 255, 0.15); }
 
-        footer { padding: 100px 0; text-align: center; color: #444; letter-spacing: 2px; }
+        footer {
+    background: #000;
+    padding: 60px 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* เส้นขอบแสงวิ่งด้านบน */
+footer::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 1px;
+    background: linear-gradient(90deg, transparent, #00ffcc, transparent);
+    animation: scanline 4s linear infinite;
+}
+
+@keyframes scanline {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* สไตล์ข้อความ */
+.footer-text {
+    color: #666;
+    font-size: 14px;
+    letter-spacing: 2px;
+    transition: 0.3s;
+    margin-bottom: 20px;
+    display: inline-block;
+}
+
+.footer-text:hover {
+    color: #fff;
+    text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc; /* แสงนีออน */
+}
+
+/* สไตล์ไอคอนโซเชียล */
+.social-icons { margin-top: 15px; }
+.social-icons a {
+    color: #444;
+    font-size: 20px;
+    margin: 0 15px;
+    transition: 0.3s;
+    display: inline-block;
+    width: auto; /* แก้จาก width: 100vw ของเดิม */
+}
+
+.social-icons a:hover {
+    color: #fff;
+    transform: translateY(-5px); /* ลอยขึ้น */
+}
+
     </style>
 </head>
 <body>
@@ -111,9 +166,17 @@
             <img src="14.jpg" loading="lazy" class="reveal-item">   
     </div>
 
-    <footer>
-        <p>TONKXN 66020326 • BURAPHA UNIVERSITY</p>
+   <footer>
+    <p class="footer-text">TONKXN 66020326 • BURAPHA UNIVERSITY</p>
+    
+    <div class="social-icons">
+        <a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
+        <a href="#" target="_blank"><i class="fab fa-github"></i></a>
+        <a href="#" target="_blank"><i class="fa-solid fa-envelope"></i></a>
+    </div>
     </footer>
+
 
     <script>
         // 1. ระบบแสง Spotlight แบบ Optimized (ไม่หน่วง)
