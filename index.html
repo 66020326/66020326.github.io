@@ -55,57 +55,57 @@
         <img src="2.jpg" class="reveal-item">
         <img src="3.jpg" class="reveal-item">
         <img src="4.jpg" class="reveal-item">
-        <img src="18.jpg" class="reveal-item">
+        <img src="18.jpeg" class="reveal-item">
 
         <div class="image-wrapper reveal-item">
-            <img src="5.jpg" style="width: 100%;">
+            <img src="5.jpg" loading="lazy" style="width: 100%;">
             <a href="https://www.facebook.com/share/v/1HP4yAgQS6/" target="_blank" class="hotspot" style="top: 22%; left: 42%; width: 55%; height: 46%;"></a>
         </div>
 
-        <img src="6.jpg" class="reveal-item">
+        <img src="6.jpg" loading="lazy" class="reveal-item">
 
         <div class="image-wrapper reveal-item">
-            <img src="7.jpg" style="width: 100%;">
+            <img src="7.jpg" loading="lazy" style="width: 100%;">
             <a href="https://drive.google.com/file/d/17i3Q1kH3FqMnoDNdvYUP5SdmwpnqUcwJ/view?usp=sharing" target="_blank" class="hotspot" style="top: 22%; left: 50%; width: 45%; height: 45%;"></a>
         </div>
 
         <div class="image-wrapper reveal-item">
-            <img src="8.jpg" style="width: 100%;">
+            <img src="8.jpg" loading="lazy" style="width: 100%;">
             <a href="https://youtu.be/y841xb75Suk?si=djq5KErC1Cqqu_xy" target="_blank" class="hotspot" style="top: 23%; left: 47.5%; width: 51%; height: 50%;"></a>
         </div>
 
         <div class="image-wrapper reveal-item">
-            <img src="9.jpg" style="width: 100%;">
+            <img src="9.jpg" loading="lazy" style="width: 100%;">
             <a href="https://th.shp.ee/UAFgZ1v" target="_blank" class="hotspot" style="top: 18%; left: 51%; width: 45%; height: 75%;"></a>
         </div>
 
         <div class="image-wrapper reveal-item">
-            <img src="10.jpg" style="width: 100%;">
+            <img src="10.jpg" loading="lazy" style="width: 100%;">
             <a href="https://www.youtube.com/live/tpfQJlYRdq4?si=V4UYbhafrxJMZ3uf" target="_blank" class="hotspot" style="top: 17%; left: 53.5%; width: 42%; height: 77.5%;"></a>
         </div>
 
-        <img src="11.jpg" class="reveal-item">
-        <img src="12.jpg" class="reveal-item">
+        <img src="11.jpg" loading="lazy" class="reveal-item">
+        <img src="12.jpg" loading="lazy" class="reveal-item">
         
         <div class="image-wrapper reveal-item">
-            <img src="17.jpg" style="width: 100%;">
+            <img src="17.jpg" loading="lazy" style="width: 100%;">
             <a href="https://www.tiktok.com/@tamatoryofficial?_r=1&amp;_t=ZS-93ovnrI0G6U" target="_blank" class="hotspot" style="top: 18%; left: 56%; width: 42%; height: 74%;"></a>
         </div>
         
         <div class="image-wrapper reveal-item">
-            <img src="13.jpg" style="width: 100%;">
+            <img src="13.jpg" loading="lazy" style="width: 100%;">
             <a href="https://www.tiktok.com/@sulfonion?_r=1&_t=ZS-93ouqhfHROZ" target="_blank" class="hotspot" style="top:20%; left: 55%; width: 43%; height: 70%;"></a>
         </div>
 
-        <img src="14.jpg" class="reveal-item">
+        <img src="14.jpg" loading="lazy" class="reveal-item">
 
         <div class="image-wrapper reveal-item">
-            <img src="15.jpg" style="width: 100%;">
+            <img src="15.jpg" loading="lazy" style="width: 100%;">
             <<a href="https://www.tiktok.com/@zuwalahotel?_r=1&_t=ZS-93ous263Gsi" target="_blank" class="hotspot" style="top: 20%; left: 48.5%; width: 48.5%; height: 55%;"></a>
         </div>
 
         <div class="image-wrapper reveal-item">
-            <img src="16.jpg" style="width: 100%;">
+            <img src="16.jpg" loading="lazy" style="width: 100%;">
             <a href="https://s.lemon8-app.com/s/GghjRQyfNU" target="_blank" class="hotspot" style="top: 25%; left: 53%; width: 46%; height: 55%;"></a>
         </div>
     </div>
@@ -115,21 +115,35 @@
     </footer>
 
     <script>
-        // ระบบแสง Spotlight
+        // 1. ระบบแสง Spotlight แบบ Optimized (ไม่หน่วง)
         const spotlight = document.getElementById('spotlight');
+        let mouseX = 0;
+        let mouseY = 0;
+
+        // จับตำแหน่งเมาส์แต่ยังไม่สั่งวาดภาพทันที
         window.addEventListener('mousemove', (e) => {
-            spotlight.style.setProperty('--x', e.clientX + 'px');
-            spotlight.style.setProperty('--y', e.clientY + 'px');
+            mouseX = e.clientX;
+            mouseY = e.clientY;
         });
 
-        // ระบบ Scroll Reveal (ตรวจจับการเลื่อนจอ)
+        // สั่งวาดภาพตามเฟรมเรตของหน้าจอ (60fps)
+        function updateSpotlight() {
+            spotlight.style.setProperty('--x', mouseX + 'px');
+            spotlight.style.setProperty('--y', mouseY + 'px');
+            requestAnimationFrame(updateSpotlight);
+        }
+        updateSpotlight(); // เริ่มทำงาน
+
+        // 2. ระบบ Scroll Reveal (เหมือนเดิม)
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('active');
+                    // พอโชว์แล้ว เลิกจับตาดู เพื่อประหยัดทรัพยากร
+                    observer.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.1 });
+        }, { threshold: 0.1 }); // ลด threshold ลงเพื่อให้โหลดไวขึ้น
 
         document.querySelectorAll('.reveal-item').forEach(item => observer.observe(item));
     </script>
