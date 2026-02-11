@@ -98,7 +98,46 @@ footer::before {
     color: #fff;
     transform: translateY(-5px); /* ลอยขึ้น */
 }
+    /* --- ปุ่ม Back to Top สุดเท่ --- */
+#backToTop {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.1); /* สีจางๆ โปร่งแสง */
+    backdrop-filter: blur(5px); /* เบลอพื้นหลัง */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%; /* ทรงกลม */
+    color: #fff;
+    text-align: center;
+    line-height: 48px;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 2000; /* ต้องอยู่บนสุด (ทับ hotspot ทับแสง) */
+    
+    /* ซ่อนไว้ก่อน (จะโชว์เมื่อเลื่อนจอ) */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all 0.4s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
 
+/* คลาสที่จะใส่เมื่อเลื่อนลงมา */
+#backToTop.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* เอฟเฟกต์ตอนเอาเมาส์ชี้ */
+#backToTop:hover {
+    background: #fff;
+    color: #000;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.8); /* เรืองแสง */
+    transform: scale(1.1); /* ขยายใหญ่ขึ้นนิดนึง */
+}
     </style>
 </head>
 <body>
@@ -175,6 +214,10 @@ footer::before {
         <a href="#" target="_blank"><i class="fab fa-github"></i></a>
         <a href="#" target="_blank"><i class="fa-solid fa-envelope"></i></a>
     </div>
+       <div id="backToTop" onclick="scrollToTop()">
+    ▲
+    </div>
+
     </footer>
 
 
@@ -210,6 +253,27 @@ footer::before {
         }, { threshold: 0.1 }); // ลด threshold ลงเพื่อให้โหลดไวขึ้น
 
         document.querySelectorAll('.reveal-item').forEach(item => observer.observe(item));
+
+            // --- ระบบปุ่ม Back to Top ---
+    const backToTopBtn = document.getElementById('backToTop');
+
+    window.addEventListener('scroll', () => {
+        // ถ้าเลื่อนลงมาเกิน 300px ให้โชว์ปุ่ม
+        if (window.scrollY > 300) {
+            backToTopBtn.classList.add('show');
+        } else {
+            backToTopBtn.classList.remove('show');
+        }
+    });
+
+    // ฟังก์ชันเลื่อนกลับบนสุดแบบนุ่มนวล
+    function scrollToTop() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }
+
     </script>
 </body>
 </html>
