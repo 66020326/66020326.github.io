@@ -53,7 +53,7 @@
                         /* --- แก้ไข: แสง Spotlight แบบไฟฉายส่องนำทาง --- */
         #spotlight {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            top: 0; left: 0; width: 70%; height: 70%;
             pointer-events: none; /* สำคัญมาก! ทำให้คลิกทะลุแสงได้ */
             z-index: 9999; /* ย้ายมาอยู่หน้าสุด ทับทุกรูป */
             
@@ -61,8 +61,8 @@
             background: radial-gradient(
                 circle 300px at var(--x, 50%) var(--y, 50%), 
                 rgba(255, 255, 255, 0.15) 0%, 
-                rgba(255, 255, 255, 0.05) 50%, 
-                transparent 65%
+                rgba(255, 255, 255, 0.05) 55%, 
+                transparent 75%
             );
             
             /* โหมดผสมสี: ทำให้แสงดูนวลเนียนไปกับภาพ ไม่ดูเป็นปื้นขาวๆ */
