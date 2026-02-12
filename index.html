@@ -17,56 +17,83 @@
             color: #e0e0e0;
             overflow-x: hidden; 
             font-family: 'Inter', sans-serif;
-            cursor: default; /* ใช้เมาส์ปกติ */
+            cursor: default;
+            position: relative; /* จำเป็นสำหรับ pseudo-element */
             
-            /* พื้นหลังเคลื่อนไหว (เพิ่มสีให้เห็นชัดขึ้น) */
-            background: linear-gradient(135deg, #080808, #1a1a1a, #0d0d20, #1a1a1a);
+            /* พื้นหลังฐาน (สีเข้มเคลื่อนไหวช้าๆ) */
+            background: linear-gradient(135deg, #080808, #121212, #0a0a14, #121212);
             background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            animation: gradientBase 20s ease infinite;
         }
 
-        @keyframes gradientBG {
+        @keyframes gradientBase {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
+
+        /* --- ⭐ ส่วนที่เพิ่มใหม่: แสงนีออนขาววิ่งอ่อนๆ ⭐ --- */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            z-index: -1; /* อยู่หลังสุด */
+            opacity: 0.03; /* ความจางของแสง (ปรับเลขนี้ถ้าอยากให้ชัดขึ้น/จางลง) */
+            
+            /* สร้างเส้นแสงสีขาวเฉียงๆ */
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 80px,
+                #ffffff 80px,  /* เส้นสีขาว */
+                transparent 85px /* ความหนาของเส้น */
+            );
+            animation: neonRun 15s linear infinite; /* สั่งให้วิ่ง */
+        }
+
+        @keyframes neonRun {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-100px); /* ขยับขึ้นไปเรื่อยๆ */ }
+        }
+        /* -------------------------------------------------- */
+
 
         /* --- 2. แสง Spotlight (แสงนวลๆ ตามเมาส์) --- */
         #spotlight {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 1;
-            /* แสงสีขาวอมฟ้าจางๆ วิ่งตามเมาส์ */
-            background: radial-gradient(circle 800px at var(--x, 50%) var(--y, 50%), rgba(100, 150, 255, 0.06) 0%, rgba(0, 0, 0, 0) 70%);
+            background: radial-gradient(circle 800px at var(--x, 50%) var(--y, 50%), rgba(255, 255, 255, 0.05) 0%, rgba(0, 0, 0, 0) 60%);
+            mix-blend-mode: screen; /* ให้แสงซ้อนทับกันสวยขึ้น */
         }
 
         .container { 
             width: 100%; 
             display: flex; flex-direction: column; 
-            padding-top: 40px; /* ลดช่องว่างด้านบนลงหน่อย */
+            padding-top: 40px;
             z-index: 2;
         }
 
-        /* --- 3. รูปภาพ (ขยายใหญ่ขึ้นเป็น 95%) --- */
+        /* --- 3. รูปภาพ (ใหญ่เต็มตา 95%) --- */
         .image-wrapper, .reveal-item { 
             position: relative; 
-            width: 95vw !important; /* ขยายให้เกือบเต็มจอ */
-            margin: 40px auto;      /* ลดระยะห่างระหว่างรูปลง */
-            border-radius: 6px;     /* มุมมนน้อยลงเพื่อให้ดูเต็มๆ */
-            box-shadow: 0 15px 40px rgba(0,0,0,0.4); 
+            width: 95vw !important; 
+            margin: 40px auto; 
+            border-radius: 6px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5); 
             transition: transform 0.1s ease-out;
-            background: #000; 
+            background: #0a0a0a; /* รองพื้นสีดำเข้ม */
         }
         
         .reveal-item img {
             width: 100%; display: block;
             transition: transform 0.7s ease, filter 0.5s ease;
-            filter: brightness(0.98); /* ปรับให้สว่างขึ้นเกือบปกติ */
+            filter: brightness(0.95) contrast(1.1); /* ปรับภาพให้ดูเข้มขลังขึ้น */
         }
 
         .reveal-item:hover img {
-            transform: scale(1.01); /* ขยายตอนเชี้แค่นิดเดียวพอ */
-            filter: brightness(1.05); 
+            transform: scale(1.01);
+            filter: brightness(1.05) contrast(1); 
         }
 
         .reveal-item {
@@ -79,21 +106,21 @@
         .hotspot {
             position: absolute; display: block; z-index: 10;
             background: rgba(255, 255, 255, 0); 
-            cursor: pointer; /* เมาส์เป็นรูปนิ้วมือเวลากดได้ */
+            cursor: pointer;
         }
 
         /* --- 5. Footer --- */
         footer {
-            background: rgba(0,0,0,0.6);
+            background: rgba(0,0,0,0.7);
             backdrop-filter: blur(10px);
             padding: 80px 0;
             text-align: center;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
             z-index: 2; position: relative;
         }
 
         .footer-text {
-            color: #aaa; /* สีเทาสว่างขึ้น */
+            color: #aaa;
             font-size: 14px;
             letter-spacing: 3px;
             font-weight: 400;
@@ -102,8 +129,8 @@
         }
 
         .social-icons a {
-            color: #666; 
-            font-size: 24px; /* ไอคอนใหญ่ขึ้นนิดนึง */
+            color: #777; 
+            font-size: 24px;
             margin: 0 20px;
             transition: 0.3s;
             display: inline-block;
@@ -111,6 +138,7 @@
         .social-icons a:hover {
             color: #fff; 
             transform: translateY(-5px);
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
         }
 
         /* --- 6. ปุ่ม Back to Top --- */
@@ -119,7 +147,7 @@
             bottom: 30px; right: 30px;
             width: 50px; height: 50px;
             background: rgba(0,0,0,0.7);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 50%;
             color: #fff;
             font-size: 16px;
@@ -127,26 +155,26 @@
             cursor: pointer; z-index: 100;
             opacity: 0; transform: translateY(20px);
             transition: all 0.4s ease;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
         }
         #backToTop.show { opacity: 1; transform: translateY(0); }
         #backToTop:hover { 
             background: #fff; 
             color: #000; 
+            box-shadow: 0 0 15px rgba(255,255,255,0.3);
         }
 
-        /* รูปแนวตั้ง (ขยายตามสัดส่วน) */
         .portrait { max-width: 700px !important; width: 100% !important; }
 
         /* --- 7. Loading Screen --- */
         #loader {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #080808; z-index: 10000;
+            background: #050505; z-index: 10000;
             display: flex; justify-content: center; align-items: center;
             transition: opacity 0.6s ease;
         }
         .loader-text {
             color: #fff; font-size: 20px; letter-spacing: 8px; font-weight: 300;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
             animation: pulse 1.5s infinite;
         }
         @keyframes pulse { 0% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; } }
@@ -208,114 +236,4 @@
         </div>
         
         <div class="image-wrapper reveal-item">
-            <img src="13.jpg">
-            <a href="https://www.tiktok.com/@sulfonion?_r=1&_t=ZS-93ouqhfHROZ" target="_blank" class="hotspot" style="top:20%; left: 55%; width: 43%; height: 70%;"></a>
-        </div>
-
-        <div class="image-wrapper reveal-item">
-            <img src="15.jpg">
-            <a href="https://www.tiktok.com/@zuwalahotel?_r=1&_t=ZS-93ous263Gsi" target="_blank" class="hotspot" style="top: 20%; left: 48.5%; width: 48.5%; height: 55%;"></a>
-        </div>
-
-        <div class="image-wrapper reveal-item">
-            <img src="16.jpg">
-            <a href="https://s.lemon8-app.com/s/GghjRQyfNU" target="_blank" class="hotspot" style="top: 25%; left: 53%; width: 46%; height: 55%;"></a>
-        </div>
-        
-        <div class="reveal-item"><img src="14.jpg"></div>   
-    </div>
-
-   <footer>
-    <div class="footer-text" id="typewriter"></div>
-    
-    <div class="social-icons">
-        <a href="https://www.facebook.com/wetkuns.karaket?" target="_blank"><i class="fab fa-facebook-f"></i></a>
-        <a href="https://www.instagram.com/tonkxn_?igsh=Y3B6ZGtmeTBjOXA1&utm_source=qr" target="_blank"><i class="fab fa-instagram"></i></a>
-        <a href="https://github.com/66020326" target="_blank"><i class="fab fa-github"></i></a>
-        <a href="mailto:66020326@go.buu.ac.th"><i class="fa-solid fa-envelope"></i></a>
-    </div>
-    
-    <div id="backToTop" onclick="scrollToTop()">
-        <i class="fas fa-arrow-up"></i>
-    </div>
-    </footer>
-
-    <script>
-        // 1. Loading
-        window.addEventListener('load', () => {
-            const loader = document.getElementById('loader');
-            setTimeout(() => {
-                loader.style.opacity = '0';
-                setTimeout(() => { loader.style.display = 'none'; }, 600);
-            }, 800);
-        });
-
-        // 2. Spotlight Movement Only
-        const spotlight = document.getElementById('spotlight');
-        window.addEventListener('mousemove', (e) => {
-            spotlight.style.setProperty('--x', `${e.clientX}px`);
-            spotlight.style.setProperty('--y', `${e.clientY}px`);
-        });
-
-        // 3. Reveal & Tilt (ลดความเอียงลงเพื่อให้ดู Minimal)
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('.reveal-item').forEach(item => {
-            observer.observe(item);
-            
-            item.addEventListener('mousemove', (e) => {
-                const rect = item.getBoundingClientRect();
-                const x = e.clientX - rect.left; 
-                const y = e.clientY - rect.top;
-                
-                const xPercent = (x / rect.width - 0.5) * 2; 
-                const yPercent = (y / rect.height - 0.5) * 2;
-
-                // Tilt Effect (เบาๆ)
-                item.style.transform = `perspective(1000px) rotateX(${yPercent * -0.5}deg) rotateY(${xPercent * 0.5}deg) scale(1.005)`;
-            });
-
-            item.addEventListener('mouseleave', () => {
-                item.style.transform = `perspective(1000px) rotateX(0) rotateY(0) scale(1)`;
-            });
-        });
-
-        // 4. Typewriter
-        const textElement = document.getElementById('typewriter');
-        const textToType = "TONKXN 66020326 • BURAPHA UNIVERSITY";
-        let charIndex = 0;
-
-        function typeWriter() {
-            if (charIndex < textToType.length) {
-                textElement.innerHTML += textToType.charAt(charIndex);
-                charIndex++;
-                setTimeout(typeWriter, 80); 
-            } else {
-                textElement.style.borderRight = "none";
-            }
-        }
-        
-        const footerObserver = new IntersectionObserver((entries) => {
-            if(entries[0].isIntersecting && charIndex === 0) typeWriter();
-        });
-        footerObserver.observe(document.querySelector('footer'));
-
-        // 5. Back to Top
-        const backToTopBtn = document.getElementById('backToTop');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 300) backToTopBtn.classList.add('show');
-            else backToTopBtn.classList.remove('show');
-        });
-
-        function scrollToTop() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-    </script>
-</body>
-</html>
+            <img src="13.jpg
