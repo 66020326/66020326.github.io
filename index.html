@@ -17,10 +17,10 @@
             color: #e0e0e0;
             overflow-x: hidden; 
             font-family: 'Inter', sans-serif;
-            cursor: default; /* กลับมาใช้เมาส์ปกติ */
+            cursor: default; /* ใช้เมาส์ปกติ */
             
-            /* พื้นหลังเคลื่อนไหว (Deep Space Effect) */
-            background: linear-gradient(125deg, #000000, #0a0a0a, #000000, #051515);
+            /* พื้นหลังเคลื่อนไหว (เพิ่มสีให้เห็นชัดขึ้น) */
+            background: linear-gradient(135deg, #080808, #1a1a1a, #0d0d20, #1a1a1a);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
         }
@@ -36,23 +36,24 @@
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 1;
-            /* ปรับแสงให้ดูฟุ้งๆ นวลๆ ไม่แยงตา (สีเขียวมิ้นต์จางๆ) */
-            background: radial-gradient(circle 800px at var(--x, 50%) var(--y, 50%), rgba(0, 255, 204, 0.08) 0%, rgba(0, 0, 0, 0) 70%);
+            /* แสงสีขาวอมฟ้าจางๆ วิ่งตามเมาส์ */
+            background: radial-gradient(circle 800px at var(--x, 50%) var(--y, 50%), rgba(100, 150, 255, 0.06) 0%, rgba(0, 0, 0, 0) 70%);
         }
 
         .container { 
             width: 100%; 
             display: flex; flex-direction: column; 
-            padding-top: 60px; z-index: 2;
+            padding-top: 40px; /* ลดช่องว่างด้านบนลงหน่อย */
+            z-index: 2;
         }
 
-        /* --- 3. รูปภาพ (Minimal & Clean) --- */
+        /* --- 3. รูปภาพ (ขยายใหญ่ขึ้นเป็น 95%) --- */
         .image-wrapper, .reveal-item { 
             position: relative; 
-            width: 85vw !important; 
-            margin: 60px auto; 
-            border-radius: 8px;
-            box-shadow: 0 15px 50px rgba(0,0,0,0.5); 
+            width: 95vw !important; /* ขยายให้เกือบเต็มจอ */
+            margin: 40px auto;      /* ลดระยะห่างระหว่างรูปลง */
+            border-radius: 6px;     /* มุมมนน้อยลงเพื่อให้ดูเต็มๆ */
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4); 
             transition: transform 0.1s ease-out;
             background: #000; 
         }
@@ -60,12 +61,12 @@
         .reveal-item img {
             width: 100%; display: block;
             transition: transform 0.7s ease, filter 0.5s ease;
-            filter: brightness(0.95); 
+            filter: brightness(0.98); /* ปรับให้สว่างขึ้นเกือบปกติ */
         }
 
         .reveal-item:hover img {
-            transform: scale(1.02);
-            filter: brightness(1.1); 
+            transform: scale(1.01); /* ขยายตอนเชี้แค่นิดเดียวพอ */
+            filter: brightness(1.05); 
         }
 
         .reveal-item {
@@ -83,72 +84,69 @@
 
         /* --- 5. Footer --- */
         footer {
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.6);
             backdrop-filter: blur(10px);
-            padding: 100px 0;
+            padding: 80px 0;
             text-align: center;
-            border-top: 1px solid rgba(0, 255, 204, 0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
             z-index: 2; position: relative;
         }
 
         .footer-text {
-            color: #00ffcc;
+            color: #aaa; /* สีเทาสว่างขึ้น */
             font-size: 14px;
             letter-spacing: 3px;
-            font-weight: 300;
+            font-weight: 400;
             margin-bottom: 40px;
-            text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
-            border-right: 2px solid #00ffcc;
+            border-right: 2px solid #aaa;
         }
 
         .social-icons a {
             color: #666; 
-            font-size: 22px;
+            font-size: 24px; /* ไอคอนใหญ่ขึ้นนิดนึง */
             margin: 0 20px;
-            transition: 0.4s;
+            transition: 0.3s;
             display: inline-block;
         }
         .social-icons a:hover {
-            color: #00ffcc; 
+            color: #fff; 
             transform: translateY(-5px);
-            text-shadow: 0 0 15px #00ffcc;
         }
 
         /* --- 6. ปุ่ม Back to Top --- */
         #backToTop {
             position: fixed;
-            bottom: 40px; right: 40px;
+            bottom: 30px; right: 30px;
             width: 50px; height: 50px;
-            background: rgba(0,0,0,0.8);
-            border: 1px solid rgba(0, 255, 204, 0.3);
+            background: rgba(0,0,0,0.7);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 50%;
-            color: #00ffcc;
+            color: #fff;
             font-size: 16px;
             display: flex; justify-content: center; align-items: center;
             cursor: pointer; z-index: 100;
             opacity: 0; transform: translateY(20px);
             transition: all 0.4s ease;
-            box-shadow: 0 0 10px rgba(0, 255, 204, 0.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
         }
         #backToTop.show { opacity: 1; transform: translateY(0); }
         #backToTop:hover { 
-            background: #00ffcc; 
+            background: #fff; 
             color: #000; 
-            box-shadow: 0 0 25px rgba(0, 255, 204, 0.8); 
         }
 
-        .portrait { max-width: 600px !important; width: 100% !important; }
+        /* รูปแนวตั้ง (ขยายตามสัดส่วน) */
+        .portrait { max-width: 700px !important; width: 100% !important; }
 
         /* --- 7. Loading Screen --- */
         #loader {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #000; z-index: 10000;
+            background: #080808; z-index: 10000;
             display: flex; justify-content: center; align-items: center;
             transition: opacity 0.6s ease;
         }
         .loader-text {
-            color: #00ffcc; font-size: 20px; letter-spacing: 8px; font-weight: 300;
-            text-shadow: 0 0 15px rgba(0, 255, 204, 0.8);
+            color: #fff; font-size: 20px; letter-spacing: 8px; font-weight: 300;
             animation: pulse 1.5s infinite;
         }
         @keyframes pulse { 0% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; } }
@@ -252,20 +250,14 @@
             }, 800);
         });
 
-        // 2. Spotlight Movement Only (No Custom Cursor)
+        // 2. Spotlight Movement Only
         const spotlight = document.getElementById('spotlight');
-        
         window.addEventListener('mousemove', (e) => {
             spotlight.style.setProperty('--x', `${e.clientX}px`);
             spotlight.style.setProperty('--y', `${e.clientY}px`);
         });
 
-        document.querySelectorAll('a, .hotspot, #backToTop').forEach(el => {
-            el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
-            el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
-        });
-
-        // 3. Reveal & Tilt
+        // 3. Reveal & Tilt (ลดความเอียงลงเพื่อให้ดู Minimal)
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -285,8 +277,8 @@
                 const xPercent = (x / rect.width - 0.5) * 2; 
                 const yPercent = (y / rect.height - 0.5) * 2;
 
-                // Tilt Effect
-                item.style.transform = `perspective(1000px) rotateX(${yPercent * -1}deg) rotateY(${xPercent * 1}deg) scale(1.01)`;
+                // Tilt Effect (เบาๆ)
+                item.style.transform = `perspective(1000px) rotateX(${yPercent * -0.5}deg) rotateY(${xPercent * 0.5}deg) scale(1.005)`;
             });
 
             item.addEventListener('mouseleave', () => {
