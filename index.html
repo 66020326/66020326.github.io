@@ -9,291 +9,361 @@
     
     <style>
         /* --- 1. การตั้งค่าพื้นฐาน --- */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background-color: #050505; overflow-x: hidden; font-family: sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; /* ซ่อนเมาส์ปกติ */ }
+        body { 
+            background-color: #050505; 
+            overflow-x: hidden; 
+            font-family: 'Courier New', Courier, monospace; /* เปลี่ยนฟอนต์ให้ดู Tech ขึ้น */
+        }
 
-        /* --- 2. แสง Spotlight วิ่งตามเม้าส์ --- */
+        /* --- 2. Custom Cursor (เมาส์เรืองแสง) --- */
+        .cursor-dot, .cursor-outline {
+            position: fixed;
+            top: 0; left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 9999;
+            pointer-events: none;
+        }
+        .cursor-dot {
+            width: 8px; height: 8px;
+            background-color: #00ffcc;
+        }
+        .cursor-outline {
+            width: 40px; height: 40px;
+            border: 2px solid rgba(0, 255, 204, 0.5);
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+        }
+        
+        /* เมื่อเมาส์ชี้จุดสำคัญ */
+        body.hovering .cursor-outline {
+            width: 70px; height: 70px;
+            background-color: rgba(0, 255, 204, 0.1);
+            border-color: #00ffcc;
+        }
+
+        /* --- 3. แสง Spotlight (พื้นหลัง) --- */
         #spotlight {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 999;
-            background: radial-gradient(circle 180px at var(--x, 50%) var(--y, 50%), rgba(255, 255, 255, 0.12) 0%, rgba(0, 0, 0, 0) 100%);
+            pointer-events: none; z-index: 1;
+            background: radial-gradient(circle 600px at var(--x, 50%) var(--y, 50%), rgba(0, 255, 204, 0.03) 0%, rgba(0, 0, 0, 0) 100%);
         }
 
-        .container { width: 100%; display: flex; flex-direction: column; }
+        .container { 
+            width: 100%; 
+            display: flex; 
+            flex-direction: column; 
+            padding-top: 50px; /* เว้นที่ข้างบนนิดนึง */
+            z-index: 2;
+        }
 
-        /* --- 3. การจัดการรูปภาพและการแสดงผล --- */
-        .image-wrapper { position: relative; width: 100vw; line-height: 0; }
+        /* --- 4. การจัดการรูปภาพ (Parallax Tilt) --- */
+        .image-wrapper, .reveal-item { 
+            position: relative; 
+            width: 85vw !important; /* ย่อรูปนิดนึงให้ดูแพง */
+            margin: 40px auto; 
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.1s ease-out; /* สำหรับ Parallax */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
         
+        .reveal-item img {
+            width: 100%; 
+            display: block;
+            transition: transform 0.5s ease;
+        }
+
+        .reveal-item:hover img {
+            transform: scale(1.02); /* รูปขยายเมื่อชี้ */
+        }
+
+        /* Animation ตอนเลื่อนมาเจอ */
         .reveal-item {
-            width: 100vw; height: auto; display: block;
-            opacity: 0; transform: translateY(50px);
+            opacity: 0; transform: translateY(80px);
             transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1);
         }
-
         .reveal-item.active { opacity: 1; transform: translateY(0); }
 
-        /* --- 4. ปุ่มล่องหน (Hotspots) --- */
+        /* --- 5. ปุ่มล่องหน (Hotspots) --- */
         .hotspot {
             position: absolute;
             display: block;
-            z-index: 1000;
-            cursor: pointer;
-            /* วิธีปรับตำแหน่ง: เปลี่ยน 0.3 เป็น 0 เพื่อให้ล่องหนเมื่อปรับเสร็จแล้ว */
-            background: rgba(255, 0, 0, 0); 
-            transition: background 0.4s;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0); 
         }
 
-        .hotspot:hover { background: rgba(255, 255, 255, 0.15); }
-
+        /* --- 6. Footer สุดล้ำ --- */
         footer {
-    background: #000;
-    padding: 60px 0;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-}
+            background: #080808;
+            padding: 80px 0;
+            text-align: center;
+            position: relative;
+            border-top: 1px solid #1a1a1a;
+            z-index: 2;
+        }
 
-/* เส้นขอบแสงวิ่งด้านบน */
-footer::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 1px;
-    background: linear-gradient(90deg, transparent, #00ffcc, transparent);
-    animation: scanline 4s linear infinite;
-}
+        .footer-text {
+            color: #00ffcc;
+            font-size: 16px;
+            letter-spacing: 3px;
+            margin-bottom: 30px;
+            display: inline-block;
+            border-right: 2px solid #00ffcc; /* Cursor พิมพ์ดีด */
+            white-space: nowrap;
+            overflow: hidden;
+            animation: blink 0.7s step-end infinite;
+        }
 
-@keyframes scanline {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(100%); }
-}
+        @keyframes blink { 50% { border-color: transparent; } }
 
-/* สไตล์ข้อความ */
-.footer-text {
-    color: #666;
-    font-size: 14px;
-    letter-spacing: 2px;
-    transition: 0.3s;
-    margin-bottom: 20px;
-    display: inline-block;
-}
+        .social-icons a {
+            color: #555;
+            font-size: 24px;
+            margin: 0 20px;
+            transition: 0.3s;
+            display: inline-block;
+        }
+        .social-icons a:hover {
+            color: #00ffcc;
+            transform: translateY(-5px) scale(1.2);
+            text-shadow: 0 0 15px #00ffcc;
+        }
 
-.footer-text:hover {
-    color: #fff;
-    text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc; /* แสงนีออน */
-}
+        /* --- 7. ปุ่ม Back to Top --- */
+        #backToTop {
+            position: fixed;
+            bottom: 40px; right: 40px;
+            width: 60px; height: 60px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid #00ffcc;
+            border-radius: 50%;
+            color: #00ffcc;
+            font-size: 24px;
+            display: flex; justify-content: center; align-items: center;
+            cursor: pointer; z-index: 100;
+            opacity: 0; transform: translateY(20px);
+            transition: all 0.4s ease;
+        }
+        #backToTop.show { opacity: 1; transform: translateY(0); }
+        #backToTop:hover { background: #00ffcc; color: #000; box-shadow: 0 0 20px #00ffcc; }
 
-/* สไตล์ไอคอนโซเชียล */
-.social-icons { margin-top: 15px; }
-.social-icons a {
-    color: #444;
-    font-size: 20px;
-    margin: 0 15px;
-    transition: 0.3s;
-    display: inline-block;
-    width: auto; /* แก้จาก width: 100vw ของเดิม */
-}
+        /* รูปแนวตั้ง */
+        .portrait {
+            max-width: 600px !important; /* จำกัดความกว้างไม่ให้เต็มจอเกินไป */
+            width: 100% !important;
+        }
 
-.social-icons a:hover {
-    color: #fff;
-    transform: translateY(-5px); /* ลอยขึ้น */
-}
-    /* --- ปุ่ม Back to Top สุดเท่ --- */
-#backToTop {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    width: 50px;
-    height: 50px;
-    background: rgba(255, 255, 255, 0.1); /* สีจางๆ โปร่งแสง */
-    backdrop-filter: blur(5px); /* เบลอพื้นหลัง */
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 50%; /* ทรงกลม */
-    color: #fff;
-    text-align: center;
-    line-height: 48px;
-    font-size: 20px;
-    cursor: pointer;
-    z-index: 2000; /* ต้องอยู่บนสุด (ทับ hotspot ทับแสง) */
-    
-    /* ซ่อนไว้ก่อน (จะโชว์เมื่อเลื่อนจอ) */
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(20px);
-    transition: all 0.4s ease;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-}
-
-/* คลาสที่จะใส่เมื่อเลื่อนลงมา */
-#backToTop.show {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-}
-
-/* เอฟเฟกต์ตอนเอาเมาส์ชี้ */
-#backToTop:hover {
-    background: #fff;
-    color: #000;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.8); /* เรืองแสง */
-    transform: scale(1.1); /* ขยายใหญ่ขึ้นนิดนึง */
-}
-        /* คลาสสำหรับรูปแนวตั้ง */
-.portrait {
-    width: auto !important;  /* ยกเลิกการบังคับเต็มจอแนวนอน */
-    max-height: 90vh;        /* ให้สูงไม่เกิน 90% ของหน้าจอ */
-    display: block;
-    margin: 0 auto;          /* จัดให้อยู่ตรงกลางจอ */
-    box-shadow: 0 0 20px rgba(0,0,0,0.5); /* (แถม) ใส่เงาให้รูปดูลอยๆ */
-}
-
-/* ถ้าหน้าจอโทรศัพท์ (จอเล็ก) ให้กลับไปเต็มจอเหมือนเดิมก็ได้ */
-@media (max-width: 768px) {
-    .portrait {
-        width: 100% !important;
-        max-height: none;
-    }
-}
+        /* --- 8. Loading Screen --- */
+        #loader {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #000;
+            z-index: 10000;
+            display: flex; justify-content: center; align-items: center;
+            flex-direction: column;
+            transition: opacity 0.5s ease;
+        }
+        .loader-text {
+            color: #00ffcc;
+            font-size: 24px;
+            letter-spacing: 5px;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; text-shadow: 0 0 20px #00ffcc; } 100% { opacity: 0.5; } }
 
     </style>
 </head>
 <body>
 
+    <div id="loader">
+        <div class="loader-text">TONKXN PORTFOLIO</div>
+        <p style="color: #444; margin-top: 10px; font-size: 12px;">LOADING...</p>
+    </div>
+
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
     <div id="spotlight"></div>
 
     <div class="container">
-        <img src="TK.Resume.jpg" class="reveal-item portrait" alt="My Resume">
-        <img src="1.jpg" class="reveal-item">
-        <img src="2.jpg" class="reveal-item">
-        <img src="3.jpg" class="reveal-item">
-        <img src="4.jpg" class="reveal-item">
-        <img src="18.jpeg" class="reveal-item">
+        <div class="reveal-item portrait">
+            <img src="TK.Resume.jpg" alt="Resume">
+        </div>
+
+        <div class="reveal-item"><img src="1.jpg"></div>
+        <div class="reveal-item"><img src="2.jpg"></div>
+        <div class="reveal-item"><img src="3.jpg"></div>
+        <div class="reveal-item"><img src="4.jpg"></div>
+        <div class="reveal-item"><img src="18.jpeg"></div>
 
         <div class="image-wrapper reveal-item">
-            <img src="5.jpg" loading="lazy" style="width: 100%;">
+            <img src="5.jpg">
             <a href="https://www.facebook.com/share/v/1HP4yAgQS6/" target="_blank" class="hotspot" style="top: 22%; left: 42%; width: 55%; height: 46%;"></a>
         </div>
 
-        <img src="6.jpg" loading="lazy" class="reveal-item">
+        <div class="reveal-item"><img src="6.jpg"></div>
 
         <div class="image-wrapper reveal-item">
-            <img src="7.jpg" loading="lazy" style="width: 100%;">
+            <img src="7.jpg">
             <a href="https://drive.google.com/file/d/17i3Q1kH3FqMnoDNdvYUP5SdmwpnqUcwJ/view?usp=sharing" target="_blank" class="hotspot" style="top: 22%; left: 50%; width: 45%; height: 45%;"></a>
         </div>
 
         <div class="image-wrapper reveal-item">
-            <img src="8.jpg" loading="lazy" style="width: 100%;">
+            <img src="8.jpg">
             <a href="https://youtu.be/y841xb75Suk?si=djq5KErC1Cqqu_xy" target="_blank" class="hotspot" style="top: 23%; left: 47.5%; width: 51%; height: 50%;"></a>
         </div>
 
         <div class="image-wrapper reveal-item">
-            <img src="9.jpg" loading="lazy" style="width: 100%;">
+            <img src="9.jpg">
             <a href="https://th.shp.ee/UAFgZ1v" target="_blank" class="hotspot" style="top: 18%; left: 51%; width: 45%; height: 75%;"></a>
         </div>
 
         <div class="image-wrapper reveal-item">
-            <img src="10.jpg" loading="lazy" style="width: 100%;">
+            <img src="10.jpg">
             <a href="https://www.youtube.com/live/tpfQJlYRdq4?si=V4UYbhafrxJMZ3uf" target="_blank" class="hotspot" style="top: 17%; left: 53.5%; width: 42%; height: 77.5%;"></a>
         </div>
 
-        <img src="11.jpg" loading="lazy" class="reveal-item">
-        <img src="12.jpg" loading="lazy" class="reveal-item">
+        <div class="reveal-item"><img src="11.jpg"></div>
+        <div class="reveal-item"><img src="12.jpg"></div>
         
         <div class="image-wrapper reveal-item">
-            <img src="17.jpg" loading="lazy" style="width: 100%;">
+            <img src="17.jpg">
             <a href="https://www.tiktok.com/@tamatoryofficial?_r=1&amp;_t=ZS-93ovnrI0G6U" target="_blank" class="hotspot" style="top: 18%; left: 56%; width: 42%; height: 74%;"></a>
         </div>
         
         <div class="image-wrapper reveal-item">
-            <img src="13.jpg" loading="lazy" style="width: 100%;">
+            <img src="13.jpg">
             <a href="https://www.tiktok.com/@sulfonion?_r=1&_t=ZS-93ouqhfHROZ" target="_blank" class="hotspot" style="top:20%; left: 55%; width: 43%; height: 70%;"></a>
         </div>
 
-
         <div class="image-wrapper reveal-item">
-            <img src="15.jpg" loading="lazy" style="width: 100%;">
+            <img src="15.jpg">
             <a href="https://www.tiktok.com/@zuwalahotel?_r=1&_t=ZS-93ous263Gsi" target="_blank" class="hotspot" style="top: 20%; left: 48.5%; width: 48.5%; height: 55%;"></a>
         </div>
 
         <div class="image-wrapper reveal-item">
-            <img src="16.jpg" loading="lazy" style="width: 100%;">
+            <img src="16.jpg">
             <a href="https://s.lemon8-app.com/s/GghjRQyfNU" target="_blank" class="hotspot" style="top: 25%; left: 53%; width: 46%; height: 55%;"></a>
         </div>
         
-            <img src="14.jpg" loading="lazy" class="reveal-item">   
+        <div class="reveal-item"><img src="14.jpg"></div>   
     </div>
 
    <footer>
-    <p class="footer-text">TONKXN 66020326 • BURAPHA UNIVERSITY</p>
+    <div class="footer-text" id="typewriter"></div>
     
     <div class="social-icons">
         <a href="https://www.facebook.com/wetkuns.karaket?" target="_blank"><i class="fab fa-facebook-f"></i></a>
         <a href="https://www.instagram.com/tonkxn_?igsh=Y3B6ZGtmeTBjOXA1&utm_source=qr" target="_blank"><i class="fab fa-instagram"></i></a>
         <a href="https://github.com/66020326" target="_blank"><i class="fab fa-github"></i></a>
-        <a href="mailto:66020326@go.buu.ac.th">
-    <i class="fa-solid fa-envelope"></i>
-</a>
+        <a href="mailto:66020326@go.buu.ac.th"><i class="fa-solid fa-envelope"></i></a>
     </div>
-       <div id="backToTop" onclick="scrollToTop()">
-    ▲
+    
+    <div id="backToTop" onclick="scrollToTop()">
+        <i class="fas fa-chevron-up"></i>
     </div>
-
     </footer>
 
-
     <script>
-        // 1. ระบบแสง Spotlight แบบ Optimized (ไม่หน่วง)
-        const spotlight = document.getElementById('spotlight');
-        let mouseX = 0;
-        let mouseY = 0;
-
-        // จับตำแหน่งเมาส์แต่ยังไม่สั่งวาดภาพทันที
-        window.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
+        // 1. Loading Screen
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                setTimeout(() => { loader.style.display = 'none'; }, 500);
+            }, 1000); // โชว์ 1 วินาที
         });
 
-        // สั่งวาดภาพตามเฟรมเรตของหน้าจอ (60fps)
-        function updateSpotlight() {
-            spotlight.style.setProperty('--x', mouseX + 'px');
-            spotlight.style.setProperty('--y', mouseY + 'px');
-            requestAnimationFrame(updateSpotlight);
-        }
-        updateSpotlight(); // เริ่มทำงาน
+        // 2. Custom Cursor
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+        
+        window.addEventListener('mousemove', (e) => {
+            const posX = e.clientX;
+            const posY = e.clientY;
 
-        // 2. ระบบ Scroll Reveal (เหมือนเดิม)
+            // Dot ตามทันที
+            cursorDot.style.left = `${posX}px`;
+            cursorDot.style.top = `${posY}px`;
+
+            // Outline ตามช้าๆ (Smooth)
+            cursorOutline.animate({
+                left: `${posX}px`,
+                top: `${posY}px`
+            }, { duration: 500, fill: "forwards" });
+
+            // Spotlight Effect
+            const spotlight = document.getElementById('spotlight');
+            spotlight.style.setProperty('--x', `${posX}px`);
+            spotlight.style.setProperty('--y', `${posY}px`);
+        });
+
+        // Effect เมื่อชี้ลิงก์
+        document.querySelectorAll('a, .hotspot, #backToTop').forEach(el => {
+            el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+            el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+        });
+
+        // 3. Scroll Reveal & Parallax Tilt
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('active');
-                    // พอโชว์แล้ว เลิกจับตาดู เพื่อประหยัดทรัพยากร
-                    observer.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.1 }); // ลด threshold ลงเพื่อให้โหลดไวขึ้น
+        }, { threshold: 0.1 });
 
-        document.querySelectorAll('.reveal-item').forEach(item => observer.observe(item));
+        document.querySelectorAll('.reveal-item').forEach(item => {
+            observer.observe(item);
+            
+            // เพิ่ม Tilt Effect เวลาเลื่อนเมาส์
+            item.addEventListener('mousemove', (e) => {
+                const rect = item.getBoundingClientRect();
+                const x = e.clientX - rect.left; // ตำแหน่ง X ในรูป
+                const y = e.clientY - rect.top;  // ตำแหน่ง Y ในรูป
+                
+                const xPercent = (x / rect.width - 0.5) * 2; // -1 ถึง 1
+                const yPercent = (y / rect.height - 0.5) * 2;
 
-            // --- ระบบปุ่ม Back to Top ---
-    const backToTopBtn = document.getElementById('backToTop');
+                item.style.transform = `perspective(1000px) rotateX(${yPercent * -2}deg) rotateY(${xPercent * 2}deg) scale(1.02)`;
+            });
 
-    window.addEventListener('scroll', () => {
-        // ถ้าเลื่อนลงมาเกิน 300px ให้โชว์ปุ่ม
-        if (window.scrollY > 300) {
-            backToTopBtn.classList.add('show');
-        } else {
-            backToTopBtn.classList.remove('show');
-        }
-    });
-
-    // ฟังก์ชันเลื่อนกลับบนสุดแบบนุ่มนวล
-    function scrollToTop() {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
+            item.addEventListener('mouseleave', () => {
+                item.style.transform = `perspective(1000px) rotateX(0) rotateY(0) scale(1)`;
+            });
         });
-    }
 
+        // 4. Typewriter Effect (Footer)
+        const textElement = document.getElementById('typewriter');
+        const textToType = "TONKXN 66020326 • BURAPHA UNIVERSITY";
+        let charIndex = 0;
+
+        function typeWriter() {
+            if (charIndex < textToType.length) {
+                textElement.innerHTML += textToType.charAt(charIndex);
+                charIndex++;
+                setTimeout(typeWriter, 100); // ความเร็วพิมพ์
+            }
+        }
+        
+        // เริ่มพิมพ์เมื่อเลื่อนถึง Footer
+        const footerObserver = new IntersectionObserver((entries) => {
+            if(entries[0].isIntersecting && charIndex === 0) typeWriter();
+        });
+        footerObserver.observe(document.querySelector('footer'));
+
+        // 5. Back to Top
+        const backToTopBtn = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) backToTopBtn.classList.add('show');
+            else backToTopBtn.classList.remove('show');
+        });
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
     </script>
 </body>
 </html>
