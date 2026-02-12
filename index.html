@@ -50,17 +50,25 @@
             100% { transform: translateY(-100px); }
         }
 
-                /* --- 2. แสง Spotlight (ปรับให้เล็กลงและเข้มขึ้น) --- */
+                        /* --- แก้ไข: แสง Spotlight แบบไฟฉายส่องนำทาง --- */
         #spotlight {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 1;
-            /* - เปลี่ยนจาก 800px เป็น 400px (เล็กลงครึ่งนึง)
-               - เพิ่มความเข้มของแสงจาก 0.05 เป็น 0.15 (สว่างขึ้น 3 เท่า) 
-            */
-            background: radial-gradient(circle 400px at var(--x, 50%) var(--y, 50%), rgba(255, 255, 255, 0.15) 0%, rgba(0, 0, 0, 0) 50%);
-            mix-blend-mode: screen;
+            pointer-events: none; /* สำคัญมาก! ทำให้คลิกทะลุแสงได้ */
+            z-index: 9999; /* ย้ายมาอยู่หน้าสุด ทับทุกรูป */
+            
+            /* สร้างวงแสง: ตรงกลางสว่าง (0.15) -> ขอบจางๆ -> หายไป */
+            background: radial-gradient(
+                circle 300px at var(--x, 50%) var(--y, 50%), 
+                rgba(255, 255, 255, 0.15) 0%, 
+                rgba(255, 255, 255, 0.05) 40%, 
+                transparent 80%
+            );
+            
+            /* โหมดผสมสี: ทำให้แสงดูนวลเนียนไปกับภาพ ไม่ดูเป็นปื้นขาวๆ */
+            mix-blend-mode: screen; 
         }
+
 
 
         .container { 
